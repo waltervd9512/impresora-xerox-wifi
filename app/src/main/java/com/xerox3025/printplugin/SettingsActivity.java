@@ -35,6 +35,8 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -73,6 +75,9 @@ public class SettingsActivity extends AppCompatActivity {
         private static final int CONNECT_TIMEOUT_MS = 5000;
         private static final int IPP_PORT = 631;
 
+        private PrinterDiscovery activeDiscovery;
+        private AlertDialog discoveryDialog;
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.preferences, rootKey);
@@ -84,10 +89,37 @@ public class SettingsActivity extends AppCompatActivity {
                                 | InputType.TYPE_TEXT_VARIATION_URI));
             }
 
+            androidx.preference.ListPreference modelPref = findPreference("printer_model");
+            if (modelPref != null) {
+                modelPref.setOnPreferenceChangeListener((pref, newValue) -> {
+                    updateScanVisibility(String.valueOf(newValue));
+                    updateDefaultPrinterName(String.valueOf(newValue));
+                    return true;
+                });
+                String model = PreferenceManager.getDefaultSharedPreferences(requireContext())
+                        .getString("printer_model", "phaser_3020");
+                updateScanVisibility(model);
+            }
+
             Preference scanDoc = findPreference("scan_document");
             if (scanDoc != null) {
                 scanDoc.setOnPreferenceClickListener(pref -> {
+                    String model = PreferenceManager.getDefaultSharedPreferences(requireContext())
+                            .getString("printer_model", "phaser_3020");
+                    if ("phaser_3020".equals(model)) {
+                        Toast.makeText(requireContext(), R.string.scan_not_supported,
+                                Toast.LENGTH_LONG).show();
+                        return true;
+                    }
                     startActivity(new android.content.Intent(requireContext(), ScanActivity.class));
+                    return true;
+                });
+            }
+
+            Preference findPrinterIp = findPreference("find_printer_ip");
+            if (findPrinterIp != null) {
+                findPrinterIp.setOnPreferenceClickListener(pref -> {
+                    runPrinterDiscovery();
                     return true;
                 });
             }
@@ -143,7 +175,142 @@ public class SettingsActivity extends AppCompatActivity {
 
         private String getPrinterIp() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
-            return prefs.getString("printer_ip", "192.168.0.109");
+            return prefs.getString("printer_ip", "192.168.1.100");
+        }
+
+        private void updateScanVisibility(String model) {
+            Preference scanDoc = findPreference("scan_document");
+            if (scanDoc != null) {
+                scanDoc.setEnabled("workcentre_3025".equals(model));
+            }
+        }
+
+        private void updateDefaultPrinterName(String model) {
+            EditTextPreference namePref = findPreference("printer_name");
+            if (namePref == null) return;
+            String current = namePref.getText();
+            if (current == null || current.isEmpty()
+                    || "Xerox Phaser 3020".equals(current)
+                    || "Xerox WorkCentre 3025".equals(current)) {
+                String defaultName = "workcentre_3025".equals(model)
+                        ? "Xerox WorkCentre 3025"
+                        : "Xerox Phaser 3020";
+                namePref.setText(defaultName);
+            }
+        }
+
+        @Override
+        public void onStop() {
+            if (activeDiscovery != null) {
+                activeDiscovery.cancel();
+                activeDiscovery = null;
+            }
+            if (discoveryDialog != null && discoveryDialog.isShowing()) {
+                discoveryDialog.dismiss();
+            }
+            super.onStop();
+        }
+
+        private void runPrinterDiscovery() {
+            if (activeDiscovery != null) {
+                activeDiscovery.cancel();
+            }
+
+            final List<PrinterDiscovery.DiscoveredPrinter> discovered = new ArrayList<>();
+
+            discoveryDialog = new AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.pref_find_printer_ip)
+                    .setMessage(getString(R.string.discovery_searching))
+                    .setCancelable(true)
+                    .setNegativeButton(R.string.discovery_cancel, (d, w) -> {
+                        if (activeDiscovery != null) {
+                            activeDiscovery.cancel();
+                            activeDiscovery = null;
+                        }
+                    })
+                    .create();
+            discoveryDialog.show();
+
+            activeDiscovery = new PrinterDiscovery(requireContext());
+            activeDiscovery.discover(new PrinterDiscovery.Callback() {
+                @Override
+                public void onProgress(String message) {
+                    if (discoveryDialog != null && discoveryDialog.isShowing()) {
+                        discoveryDialog.setMessage(message);
+                    }
+                }
+
+                @Override
+                public void onPrinterFound(PrinterDiscovery.DiscoveredPrinter printer) {
+                    discovered.add(printer);
+                    if (discoveryDialog != null && discoveryDialog.isShowing()) {
+                        discoveryDialog.setMessage(getString(R.string.discovery_found_count,
+                                discovered.size()) + "\n\n" + printer.getDisplayLabel());
+                    }
+                }
+
+                @Override
+                public void onComplete(List<PrinterDiscovery.DiscoveredPrinter> printers) {
+                    activeDiscovery = null;
+                    if (!isAdded()) return;
+
+                    if (discoveryDialog != null && discoveryDialog.isShowing()) {
+                        discoveryDialog.dismiss();
+                    }
+
+                    if (printers.isEmpty()) {
+                        new AlertDialog.Builder(requireContext())
+                                .setTitle(R.string.pref_find_printer_ip)
+                                .setMessage(R.string.discovery_none)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show();
+                        return;
+                    }
+
+                    String[] labels = new String[printers.size()];
+                    for (int i = 0; i < printers.size(); i++) {
+                        labels[i] = printers.get(i).getDisplayLabel();
+                    }
+
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.discovery_select_title)
+                            .setItems(labels, (d, which) -> applyDiscoveredPrinter(printers.get(which)))
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                }
+
+                @Override
+                public void onError(String message) {
+                    activeDiscovery = null;
+                    if (!isAdded()) return;
+                    if (discoveryDialog != null && discoveryDialog.isShowing()) {
+                        discoveryDialog.dismiss();
+                    }
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        private void applyDiscoveredPrinter(PrinterDiscovery.DiscoveredPrinter printer) {
+            EditTextPreference ipPref = findPreference("printer_ip");
+            if (ipPref != null) {
+                ipPref.setText(printer.ip);
+            }
+
+            EditTextPreference namePref = findPreference("printer_name");
+            if (namePref != null && printer.name != null && !printer.name.equals(printer.ip)) {
+                String cleanedName = printer.name.replace("_ipp._tcp.local.", "")
+                        .replace(".local.", "")
+                        .replace('_', ' ')
+                        .trim();
+                if (!cleanedName.isEmpty()) {
+                    namePref.setText(cleanedName);
+                }
+            }
+
+            Toast.makeText(requireContext(),
+                    getString(R.string.discovery_ip_set, printer.ip),
+                    Toast.LENGTH_LONG).show();
         }
 
         private void runNetworkTest() {

@@ -4,19 +4,33 @@
 
     <PreferenceCategory app:title="@string/pref_category_printer">
 
+        <ListPreference
+            app:key="printer_model"
+            app:title="@string/pref_printer_model"
+            app:summary="@string/pref_printer_model_summary"
+            app:entries="@array/printer_model_entries"
+            app:entryValues="@array/printer_model_values"
+            app:defaultValue="phaser_3020"
+            app:useSimpleSummaryProvider="true" />
+
         <EditTextPreference
             app:key="printer_name"
             app:title="@string/pref_printer_name"
             app:summary="@string/pref_printer_name_summary"
-            app:defaultValue="Xerox WorkCentre 3025"
+            app:defaultValue="Xerox Phaser 3020"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             app:key="printer_ip"
             app:title="@string/pref_printer_ip"
             app:summary="@string/pref_printer_ip_summary"
-            app:defaultValue="192.168.0.109"
+            app:defaultValue="192.168.1.100"
             app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="find_printer_ip"
+            app:title="@string/pref_find_printer_ip"
+            app:summary="@string/pref_find_printer_ip_summary" />
 
     </PreferenceCategory>
 

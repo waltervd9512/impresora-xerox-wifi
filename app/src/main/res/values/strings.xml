@@ -1,52 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Xerox 3025 Print Plugin</string>
-    <string name="settings_subtitle">Printer configuration</string>
+    <string name="app_name">Impresora Xerox WiFi</string>
+    <string name="settings_subtitle">Configuración de la impresora</string>
 
-    <string name="pref_category_printer">Printer Settings</string>
-    <string name="pref_printer_name">Display Name</string>
-    <string name="pref_printer_name_summary">Name shown in Android print dialog</string>
-    <string name="pref_printer_ip">Printer IP Address</string>
-    <string name="pref_printer_ip_summary">Find this on your printer\'s config page</string>
+    <string name="pref_category_printer">Impresora</string>
+    <string name="pref_printer_model">Modelo</string>
+    <string name="pref_printer_model_summary">Seleccioná tu modelo Xerox</string>
+    <string name="model_phaser_3020">Xerox Phaser 3020</string>
+    <string name="model_workcentre_3025">Xerox WorkCentre 3025</string>
+    <string name="pref_printer_name">Nombre visible</string>
+    <string name="pref_printer_name_summary">Nombre que aparece al imprimir</string>
+    <string name="pref_printer_ip">IP de la impresora</string>
+    <string name="pref_printer_ip_summary">La encontrás en la pantalla de la impresora o en http://IP/sws/</string>
+    <string name="pref_find_printer_ip">Buscar impresora en la red</string>
+    <string name="pref_find_printer_ip_summary">Detecta automáticamente impresoras con IPP en tu Wi‑Fi</string>
+    <string name="discovery_starting">Iniciando búsqueda…</string>
+    <string name="discovery_scanning_subnet">Escaneando red %1$s</string>
+    <string name="discovery_no_local_ip">No se pudo detectar la red Wi‑Fi del teléfono</string>
+    <string name="discovery_searching">Buscando impresoras…</string>
+    <string name="discovery_found_count">Encontradas: %1$d</string>
+    <string name="discovery_none">No se encontró ninguna impresora.\n\nVerificá que el teléfono y la impresora estén en la misma red Wi‑Fi.</string>
+    <string name="discovery_select_title">Seleccionar impresora</string>
+    <string name="discovery_ip_set">IP configurada: %1$s</string>
+    <string name="discovery_cancel">Cancelar</string>
 
-    <string name="pref_category_diagnostics">Test &amp; Diagnostics</string>
-    <string name="pref_test_network">Test Network Connection</string>
-    <string name="pref_test_network_summary">Check if the printer is reachable</string>
-    <string name="pref_print_test_page">Print Test Page</string>
-    <string name="pref_print_test_page_summary">Send a test page to the printer</string>
-    <string name="pref_print_via_android">Print via Android Framework</string>
-    <string name="pref_print_via_android_summary">Test the full print pipeline (select Xerox 3025 in dialog)</string>
-    <string name="pref_job_history">Print Job History</string>
-    <string name="pref_job_history_summary">View recent print jobs</string>
-    <string name="pref_view_logs">View Debug Logs</string>
-    <string name="pref_view_logs_summary">View print service diagnostic logs</string>
+    <string name="pref_category_diagnostics">Pruebas y diagnóstico</string>
+    <string name="pref_test_network">Probar conexión de red</string>
+    <string name="pref_test_network_summary">Verificar que la impresora responde en la red</string>
+    <string name="pref_print_test_page">Imprimir página de prueba</string>
+    <string name="pref_print_test_page_summary">Enviar una página de prueba URF por IPP</string>
+    <string name="pref_print_via_android">Imprimir vía Android</string>
+    <string name="pref_print_via_android_summary">Probar el flujo completo (elegí la impresora en el diálogo)</string>
+    <string name="pref_job_history">Historial de impresión</string>
+    <string name="pref_job_history_summary">Ver trabajos recientes</string>
+    <string name="pref_view_logs">Ver logs de depuración</string>
+    <string name="pref_view_logs_summary">Logs del servicio de impresión</string>
 
-    <string name="pref_run_test_suite">Run Print Test Suite</string>
-    <string name="pref_run_test_suite_summary">Print 5 test documents: invoice, grayscale, dense text, shapes, letter size</string>
+    <string name="pref_run_test_suite">Ejecutar suite de pruebas</string>
+    <string name="pref_run_test_suite_summary">Imprime 5 documentos de prueba (si están en caché)</string>
 
-    <string name="pref_category_instructions">How to use</string>
-    <string name="pref_info_title">Setup Instructions</string>
-    <string name="pref_info_summary">1. Set the printer IP above\n2. Go to Android Settings → Connected devices → Printing\n3. Enable \"Xerox 3025 Print Plugin\"\n4. Print any document and select \"Xerox WorkCentre 3025\"</string>
+    <string name="pref_category_instructions">Cómo usar</string>
+    <string name="pref_info_title">Instrucciones</string>
+    <string name="pref_info_summary">1. Configurá la IP de la impresora arriba\n2. Ajustes de Android → Dispositivos conectados → Impresión\n3. Activá \"Impresora Xerox WiFi\"\n4. Imprimí desde cualquier app y elegí tu impresora</string>
 
-    <string name="no_print_history">No print jobs yet</string>
+    <string name="no_print_history">Sin trabajos de impresión aún</string>
 
-    <!-- Scan -->
-    <string name="pref_scan_document">Scan Document</string>
-    <string name="pref_scan_document_summary">Scan from the flatbed scanner</string>
-    <string name="scan_title">Scan Document</string>
-    <string name="scan_button">Scan</string>
-    <string name="scan_status_ready">Scanner ready. Place a document on the flatbed and tap Scan.</string>
-    <string name="scan_status_checking">Checking scanner status…</string>
-    <string name="scan_status_scanning">Scanning… please wait</string>
-    <string name="scan_status_retrieving">Retrieving scanned image…</string>
-    <string name="scan_status_done">Scan complete (%d KB)</string>
-    <string name="scan_status_error">Scanner error: %s</string>
-    <string name="scan_status_busy">Scanner busy: %s</string>
-    <string name="scan_status_decode_error">Could not decode scanned image</string>
-    <string name="scan_status_no_data">No image data received from scanner</string>
-    <string name="scan_preview_desc">Scanned image preview</string>
-    <string name="scan_save">Save</string>
-    <string name="scan_share">Share</string>
-    <string name="scan_share_title">Share scanned image</string>
-    <string name="scan_saved">Saved to %s</string>
+    <!-- Escaneo (solo WorkCentre 3025) -->
+    <string name="pref_scan_document">Escanear documento</string>
+    <string name="pref_scan_document_summary">Solo WorkCentre 3025 (con escáner)</string>
+    <string name="scan_title">Escanear documento</string>
+    <string name="scan_button">Escanear</string>
+    <string name="scan_status_ready">Escáner listo. Colocá el documento en el cristal y tocá Escanear.</string>
+    <string name="scan_status_checking">Verificando estado del escáner…</string>
+    <string name="scan_status_scanning">Escaneando… esperá por favor</string>
+    <string name="scan_status_retrieving">Recuperando imagen escaneada…</string>
+    <string name="scan_status_done">Escaneo completo (%d KB)</string>
+    <string name="scan_status_error">Error del escáner: %s</string>
+    <string name="scan_status_busy">Escáner ocupado: %s</string>
+    <string name="scan_status_decode_error">No se pudo decodificar la imagen</string>
+    <string name="scan_status_no_data">No se recibieron datos del escáner</string>
+    <string name="scan_preview_desc">Vista previa del escaneo</string>
+    <string name="scan_save">Guardar</string>
+    <string name="scan_share">Compartir</string>
+    <string name="scan_share_title">Compartir imagen escaneada</string>
+    <string name="scan_saved">Guardado en %s</string>
+    <string name="scan_not_supported">El escaneo solo está disponible en WorkCentre 3025</string>
 </resources>

@@ -96,7 +96,7 @@ public class Xerox3025PrintService extends PrintService {
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String printerIp = prefs.getString("printer_ip", "192.168.0.109");
+        String printerIp = prefs.getString("printer_ip", "192.168.1.100");
 
         new Thread(() -> {
             try {
@@ -312,8 +312,8 @@ public class Xerox3025PrintService extends PrintService {
         private List<PrinterInfo> buildPrinterList() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
                     service.getApplicationContext());
-            String ip = prefs.getString("printer_ip", "192.168.0.109");
-            String displayName = prefs.getString("printer_name", "Xerox WorkCentre 3025");
+            String ip = prefs.getString("printer_ip", "192.168.1.100");
+            String displayName = prefs.getString("printer_name", "Xerox Phaser 3020");
             PrintLog.i(TAG, "buildPrinterList: name=" + displayName + ", ip=" + ip);
 
             PrinterId printerId = service.generatePrinterId("xerox3025_" + ip);

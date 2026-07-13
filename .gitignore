@@ -13,5 +13,7 @@ app-debug.apk
 *.apk
 .secrets
 .keystore/
-.vscode/
 release.jks
+# IDE (opcional: quitar .vscode/ si querés compartir configuración del editor)
+.idea/
+.vscode/

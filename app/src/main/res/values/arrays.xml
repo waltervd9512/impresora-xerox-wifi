@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="printer_model_entries">
+        <item>Xerox Phaser 3020</item>
+        <item>Xerox WorkCentre 3025</item>
+    </string-array>
+    <string-array name="printer_model_values">
+        <item>phaser_3020</item>
+        <item>workcentre_3025</item>
+    </string-array>
+</resources>
