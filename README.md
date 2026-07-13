@@ -20,6 +20,16 @@ App Android para imprimir (y escanear en WorkCentre 3025) con impresoras Xerox P
 - Impresora Xerox Phaser 3020 o WorkCentre 3025 en la **misma red Wi‑Fi** que el teléfono
 - IP fija o reservada para la impresora (recomendado)
 
+## Descargar APK (sin compilar)
+
+**Versión 1.1.0** — lista para instalar:
+
+[**Descargar Impresora-Xerox-WiFi-v1.1.0.apk**](https://github.com/waltervd9512/impresora-xerox-wifi/raw/main/releases/Impresora-Xerox-WiFi-v1.1.0.apk)
+
+1. Descargá el APK en tu teléfono
+2. Abrilo e instalá (permití “orígenes desconocidos” si Android lo pide)
+3. Seguí los pasos de configuración más abajo
+
 ## Compilar el APK
 
 ### Android Studio (recomendado)
